@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { FetchCrypto, FetchAssets } from "../api";
 import { percentDifference } from "../utils";
+import { cryptoAssets } from "../data";
 
 const CryptoContext = createContext({
   assets: [],
   crypto: [],
   loading: false,
 });
+
 
 export function CryptoContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
@@ -32,6 +34,7 @@ export function CryptoContextProvider({ children }) {
     async function preload() {
       setLoading(true);
       const { result } = await FetchCrypto();
+      res = result;
       const assets = await FetchAssets();
 
       setAssets(
@@ -45,13 +48,17 @@ export function CryptoContextProvider({ children }) {
   
   function addAsset(newAsset) {
     setAssets(prev => mapAssets([...prev, newAsset], crypto))
+    localStorage.setItem(newAsset.id, JSON.stringify(newAsset))
+    let item = JSON.parse(localStorage.getItem(newAsset.id));
+    cryptoAssets.push(item)
   }
-  return <CryptoContext.Provider value={{loading, crypto, assets, addAsset}}>{children}</CryptoContext.Provider>;
+  return <CryptoContext.Provider value={{loading, crypto, assets, addAsset, setAssets, mapAssets}}>{children}</CryptoContext.Provider>;
 }
 
 
 export default CryptoContext
-
+export let res
 export function useCrypto() {
   return useContext(CryptoContext)
+  
 }

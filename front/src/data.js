@@ -609,17 +609,17 @@ export const cryptoData = {
   },
 }
 
-export const cryptoAssets = [
-  {
-    id: 'bitcoin',
-    amount: 0.02,
-    price: 26244,
-    date: new Date(),
-  },
-  {
-    id: 'ethereum',
-    amount: 5,
-    price: 2400,
-    date: new Date(),
-  },
-]
+function check(arr) {
+  let keys = Object.keys(localStorage);
+  for(let key of keys) {
+    arr.push(JSON.parse(localStorage.getItem(key)))
+  }
+  if (localStorage.length === 0) {
+    return []
+  } else {
+    return arr
+  }
+
+}
+
+export const cryptoAssets = check([])

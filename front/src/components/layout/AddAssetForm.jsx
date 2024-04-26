@@ -71,7 +71,6 @@ export function AddAssetForm() {
       price: value.price,
       date: value.date?.$d ?? new Date(),
     }
-    console.log(newAsset);
     assetRef.current = newAsset
     setResult(true)
     addAsset(newAsset)

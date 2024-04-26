@@ -1,9 +1,9 @@
-import { Layout, Card, Statistic, List, Typography, Tag } from "antd";
+import { Layout, Card, Statistic, List, Typography, Tag, Button, Result } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-
 import { capitilize } from "../../utils";
 import { useContext } from "react";
 import CryptoContext from "../../context/crypto-context";
+
 
 const siderStyle = {
   padding: "1rem",
@@ -11,10 +11,8 @@ const siderStyle = {
 
 
 export default function AppSider() {
-  const { assets} = useContext(CryptoContext)
-  console.log(assets);
 
-  
+  const { assets, setAssets, mapAssets} = useContext(CryptoContext)
 
   return (
     <Layout.Sider width="25%" style={siderStyle}>
@@ -37,6 +35,7 @@ export default function AppSider() {
               {title: 'Asset Amount', value: asset.amount, isPlane: true},
             ]}
             renderItem={(item) => (
+              
               <List.Item>
                 <span>{item.title}</span>
                 <span>
@@ -47,6 +46,17 @@ export default function AppSider() {
               </List.Item>
             )}
           />
+          <Button type="primary" size={'small'} style={{backgroundColor: '#DCDCDC', color: 'black'}} 
+          onClick={async () => {
+            localStorage.removeItem(asset.id)
+            setAssets(
+              mapAssets(assets.filter((n) => {
+                return n.id != asset.id
+              }))
+            );
+          }}>
+            delete
+          </Button>
         </Card>
       ))}
     </Layout.Sider>
